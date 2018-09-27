@@ -58,5 +58,9 @@ consuming-a-soap-service
    $ ballerina init
 ```
 
-### Developing the back-end SOAP web service
+### Deploying the back-end SOAP web service
+- [Setup the WSO2 Axis2 Server with the new UnsecureBankingService sample](https://docs.wso2.com/display/EI620/Setting+Up+the+ESB+Samples#SettingUptheESBSamples-Deployingsampleback-endservices).
+- Download the **UnsecureBankingService** source code and extract it to **<EI_HOME>/samples/axis2Server/src/** folder
+- Navigate to **UnsecureBankingService** folder and execute the ant build - **ant**
+- [Run the axis2 server](https://docs.wso2.com/display/EI620/Setting+Up+the+ESB+Samples#SettingUptheESBSamples-StartingtheAxis2server)
 
