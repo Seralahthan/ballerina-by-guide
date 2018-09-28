@@ -12,7 +12,6 @@ The following are the sections available in this guide.
 - [Implementation](#implementation)
 - [Testing](#testing)
 - [Deployment](#deployment)
-- [Observability](#observability)
 
 ## What you’ll build 
 To understand how to use Ballerina language's features to write a SOAP connector which communicates with a unsecure SOAP web service running in the back-end, Let's consider a real world use case of a banking service running online where users can view, update, delete and create accounts. You can model this banking service as a SOAP Web service which is not secure; 'unsecure_banking_service', which is deployed as an Axis2 services in the back-end and accepts different SOAP requests for banking tasks such as account creation, retrieval, updating and deletion.In order to communicate with this SOAP service we are going to exploit the power of the Ballerina SOAP connector.The following diagram illustrates all the required functionality of the Ballerina SOAP connector you are going to build and the Unsecure Banking Service you are going to deploy.
@@ -151,5 +150,31 @@ To run the unit tests, open your terminal and navigate to `consuming-a-soap-serv
 
 > The source code for the tests can be found at [consuming_a_soap_service_test.bal](https://github.com/Seralahthan/ballerina-by-guide/blob/master/consuming-a-soap-service/guide/consuming_a_soap_service/tests/consuming_a_soap_service_test.bal).
 
+## Deployment
 
+Once you are done with the development, you can deploy the service locally as below.
+
+### Deploying locally
+
+- As the first step, you can build a Ballerina executable archive (.balx) of the client that you developed. Navigate to `consuming_a_soap_service/guide` and run the following command.
+```bash
+   $ ballerina build consuming_a_soap_service
+```
+
+- Once the consuming_a_soap_service.balx is created inside the target folder, you can run that with the following command. 
+```bash
+   $ ballerina run target/consuming_a_soap_service.balx
+```
+
+- Successful running of the SOAP client results in the following output with the SOAP response for the account details.
+```
+<ns:getAccountDetailsResponse xmlns:ns="http://services.samples">
+  <ns:return xmlns:ax25="http://services.samples/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   xsi:type="ax25:AccountDetails">
+    <ax25:accountBalance>250000.0</ax25:accountBalance>
+    <ax25:accountHolderName>Alice</ax25:accountHolderName>
+    <ax25:accountNo>2417254</ax25:accountNo>
+    <ax25:message xsi:nil="true"></ax25:message>
+  </ns:return>
+</ns:getAccountDetailsResponse>
+```
 
