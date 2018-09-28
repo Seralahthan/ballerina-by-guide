@@ -60,7 +60,96 @@ consuming-a-soap-service
 
 ### Deploying the back-end SOAP web service
 - [Setup the WSO2 Axis2 Server with the new UnsecureBankingService sample](https://docs.wso2.com/display/EI620/Setting+Up+the+ESB+Samples#SettingUptheESBSamples-Deployingsampleback-endservices).
-- Download the **UnsecureBankingService** source code and extract it to **<EI_HOME>/samples/axis2Server/src/** folder
+- Download the [UnsecureBankingService](UnsecureBankingService.zip) source code and extract it to **<EI_HOME>/samples/axis2Server/src/** folder
 - Navigate to **UnsecureBankingService** folder and execute the ant build - **ant**
 - [Run the axis2 server](https://docs.wso2.com/display/EI620/Setting+Up+the+ESB+Samples#SettingUptheESBSamples-StartingtheAxis2server)
+
+### Developing the Ballerina SOAP Consumer Client
+
+- You can start by importing the wso2/soap library and defining the SOAP end point for the `UnsecureBankingService` and send/receive soap requests. The `unsecure_banking_connector` client comprises the resources for connecting to the back-end UnsecureBankingService.
+
+You can add the following code segment to your `unsecure_banking_connector.bal` file. It contains a skeleton based on which you can build the unsecure banking service connector.
+
+##### Skeleton code for unsecure_banking_connector.bal
+
+```ballerina
+import wso2/soap;
+import ballerina/io;
+
+endpoint soap:Client soapClient {
+    clientConfig: {
+        url: "http://localhost:9000"
+    }
+};
+
+public function unsecureBankingConnector(string soapAction, xml soapBody) returns soap:SoapResponse|soap:SoapError {
+    soap:SoapRequest soapRequest = {
+        soapAction: soapAction,
+        payload: soapBody
+    };
+
+    var soapResp = soapClient->sendReceive("/services/UnsecureBankingService", soapRequest);
+    return soapResp;
+}
+```
+- You can implement the business logic of constructing the SOAP request and calling the unsecure_banking_connector with that SOAP request in the `banking_connector.bal` file.
+
+##### Skeleton code for banking_connector.bal
+
+```ballerina
+import ballerina/io;
+import wso2/soap;
+
+//This client is used to connect with secure and unsecure soap backends and exchange data
+function main(string... args) {
+    xml payload = xml `<m0:getAccountDetails xmlns:m0="http://services.samples">
+                            <m0:request>
+                                <m0:accountNo>2417254</m0:accountNo>
+                            </m0:request>
+                        </m0:getAccountDetails>`;
+    var unsecureSoapResp = unsecureBankingConnector("urn:getAccountDetails", payload);
+    match unsecureSoapResp {
+        soap:SoapResponse soapResponse => io:println(soapResponse.payload);
+        soap:SoapError soapError => io:println(soapError);
+    }
+
+//    var secureSoapResp = secureBankingConnector();
+//    match secureSoapResp {
+//       soap:SoapResponse soapResponse => io:println(soapResponse);
+//       soap:SoapError soapError => io:println(soapError);
+//    }
+}
+```
+- With that you have completed the development of the SOAP Client to Consume the UnsecureBanking SOAP Service.
+
+## Testing 
+
+### Consuming the SOAP service 
+
+You can run the SOAP service that you deployed and the Ballerina SOAP Client you have developed above, in your local environment. Open your terminal and navigate to `consuming-a-soap-service/guide`, and execute the following command.
+```
+$ ballerina run consuming_a_soap_service
+```
+
+To test the functionality of the UnsecureBanking service, send SOAP requests to fetch the account details of a specific account.
+
+### Writing unit tests
+
+In Ballerina, the unit test cases should be in the same package inside a folder named as 'tests'. When writing the test functions, follow the convention given below.
+- Test functions should be annotated with `@test:Config`. See the following example.
+```ballerina
+@test:Config
+function getAccountDetails() {
+```
+
+The source code for this guide contains unit test cases for each SOAP action available in the 'UnsecureBanking' service deployed above.
+
+To run the unit tests, open your terminal and navigate to `consuming-a-soap-service/guide`, and run the following command.
+```bash
+   $ ballerina test
+```
+
+> The source code for the tests can be found at [consuming_a_soap_service_test.bal](https://github.com/ballerina-by-guide/consuming-a-soap-service/blob/master/guide/consuming_a_soap_service/tests/consuming_a_soap_service_test.bal).
+
+
 
