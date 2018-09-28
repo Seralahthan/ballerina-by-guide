@@ -28,9 +28,9 @@ function getAccountDetails() {
     //                                 <ax25:accountBalance>250000.0</ax25:accountBalance>
     //                                 <ax25:accountHolderName>Alice</ax25:accountHolderName>
     //                                 <ax25:accountNo>2417254</ax25:accountNo>
+    //                                 <ax25:message xsi:nil="true"></ax25:message>
     //                             </ns:return>
-    //                         </ns:getAccountDetailsResponse>`;             
-    // xml expGetResp = xml `<ns:getAccountDetailsResponse xmlns:ns="http://services.samples"><ns:return xmlns:ax25="http://services.samples/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ax25:AccountDetails"><ax25:accountBalance>250000.0</ax25:accountBalance><ax25:accountHolderName>Alice</ax25:accountHolderName><ax25:accountNo>2417254</ax25:accountNo></ns:return></ns:getAccountDetailsResponse>`;
+    //                         </ns:getAccountDetailsResponse>`;           
 
     string[] expGetResp = ["Alice","2417254","250000.0"];
     var resp1 = unsecureBankingConnector("urn:getAccountDetails", getReq);
@@ -39,6 +39,7 @@ function getAccountDetails() {
     match resp1 {
         soap:SoapResponse soapResponse => {
             xml temp =  <xml>soapResponse.payload;
+            //io:println(temp);
             string[] soapGetResp = [<string>temp.selectDescendants(axis:accountHolderName)[0].getTextValue(), 
                                     <string>temp.selectDescendants(axis:accountNo)[0].getTextValue(),
                                     <string>temp.selectDescendants(axis:accountBalance)[0].getTextValue()];
@@ -64,13 +65,14 @@ function updateAccountDetails() {
                                 </m0:request>
                             </m0:updateAccountDetails>`;
 
-    // xml expUpdateResp = xml `<ns:getAccountDetailsResponse xmlns:ns="http://services.samples">
-    //                             <ns:return xmlns:ax25="http://services.samples/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ax25:AccountDetails">
-    //                                 <ax25:accountBalance>250000.0</ax25:accountBalance>
+    // xml expUpdateResp = xml `<ns:updateAccountDetailsResponse xmlns:ns="http://services.samples">
+    //                             <ns:return xmlns:ax25="http://services.samples/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"xsi:type="ax25:AccountDetails">
+    //                                 <ax25:accountBalance>175000.0</ax25:accountBalance>
     //                                 <ax25:accountHolderName>Alice</ax25:accountHolderName>
     //                                 <ax25:accountNo>2417254</ax25:accountNo>
+    //                                 <ax25:message xsi:nil="true"></ax25:message>
     //                             </ns:return>
-    //                         </ns:getAccountDetailsResponse>`;
+    //                         </ns:updateAccountDetailsResponse>`;
 
     string[] expUpdateResp = ["Alice","2417254","175000.0"];
 
@@ -79,6 +81,7 @@ function updateAccountDetails() {
     match resp2 {
         soap:SoapResponse soapResponse => {
             xml temp = <xml>soapResponse.payload;
+            // io:println(temp);
             string[] soapUpdateResp = [ <string>temp.selectDescendants(axis:accountHolderName)[0].getTextValue(),
                                         <string>temp.selectDescendants(axis:accountNo)[0].getTextValue(),
                                         <string>temp.selectDescendants(axis:accountBalance)[0].getTextValue()];
@@ -104,13 +107,14 @@ function deleteAccountDetails() {
                             </m0:request>
                         </m0:deleteAccountDetails>`;
 
-    // xml expDeleteResp = xml `<ns:getAccountDetailsResponse xmlns:ns="http://services.samples">
-    //                             <ns:return xmlns:ax25="http://services.samples/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ax25:AccountDetails">
-    //                                 <ax25:accountBalance>250000.0</ax25:accountBalance>
-    //                                 <ax25:accountHolderName>Alice</ax25:accountHolderName>
-    //                                 <ax25:accountNo>2417254</ax25:accountNo>
+    // xml expDeleteResp = xml `<ns:deleteAccountDetailsResponse xmlns:ns="http://services.samples">
+    //                             <ns:return xmlns:ax25="http://services.samples/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"xsi:type="ax25:AccountDetails">
+    //                                 <ax25:accountBalance>0.0</ax25:accountBalance>
+    //                                 <ax25:accountHolderName xsi:nil="true"></ax25:accountHolderName>
+    //                                 <ax25:accountNo>0</ax25:accountNo>
+    //                                 <ax25:message>Account : 2417254 Deleted Successfully</ax25:message>
     //                             </ns:return>
-    //                         </ns:getAccountDetailsResponse>`;
+    //                         </ns:deleteAccountDetailsResponse>`;
 
     string[] expDeleteResp = ["Account : 2417254 Deleted Successfully"];
 
@@ -119,6 +123,7 @@ function deleteAccountDetails() {
     match resp3 {
         soap:SoapResponse soapResponse => {
             xml temp = <xml>soapResponse.payload;
+            // io:println(temp);
             string[] soapDeleteResp = [ <string>temp.selectDescendants(axis:message)[0].getTextValue()];
             test:assertEquals(soapDeleteResp, expDeleteResp, msg = "Assertion Failed");   
         }
@@ -142,13 +147,14 @@ function createAccountDetails() {
                             </m0:request>
                         </m0:createAccountDetails>`;
 
-    // xml expCreateResp = xml `<ns:getAccountDetailsResponse xmlns:ns="http://services.samples">
-    //                             <ns:return xmlns:ax25="http://services.samples/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ax25:AccountDetails">
+    // xml expCreateResp = xml `<ns:createAccountDetailsResponse xmlns:ns="http://services.samples">
+    //                             <ns:return xmlns:ax25="http://services.samples/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"xsi:type="ax25:AccountDetails">
     //                                 <ax25:accountBalance>250000.0</ax25:accountBalance>
     //                                 <ax25:accountHolderName>Alice</ax25:accountHolderName>
     //                                 <ax25:accountNo>2417254</ax25:accountNo>
+    //                                 <ax25:message xsi:nil="true"></ax25:message>
     //                             </ns:return>
-    //                         </ns:getAccountDetailsResponse>`;
+    //                         </ns:createAccountDetailsResponse>`;
     
     string[] expCreateResp = ["Alice","2417254","250000.0"];
     var resp5 = unsecureBankingConnector("urn:createAccountDetails", createReq);
@@ -156,6 +162,7 @@ function createAccountDetails() {
     match resp5 {
         soap:SoapResponse soapResponse => {
             xml temp = <xml>soapResponse.payload;
+            // io:println(temp);
             string[] soapCreateResp = [ <string>temp.selectDescendants(axis:accountHolderName)[0].getTextValue(),
                                         <string>temp.selectDescendants(axis:accountNo)[0].getTextValue(),
                                         <string>temp.selectDescendants(axis:accountBalance)[0].getTextValue()];
@@ -178,19 +185,17 @@ function faultAccountDetails() {
                             </m0:request>
                         </m0:getAccountDetails>`;
 
-    // xml expFaultResp =    xml `<soapenv:Fault xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    // xml expFaultResp =    xml   `<soapenv:Fault xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
     //                                 <faultcode>soapenv:Server</faultcode>
     //                                 <faultstring>Account Not Found in the Database</faultstring>
     //                                 <detail>
     //                                     <ns:UnsecureBankingServiceException xmlns:ns="http://services.samples">
     //                                         <ns:UnsecureBankingServiceException>
-    //                                             <axis2ns19:Message xmlns:axis2ns19="http://services.samples">
-    //                                                 Account Not Found in the Database
-    //                                             </axis2ns19:Message>
+    //                                             <axis2ns1:Message xmlns:axis2ns1="http://services.samples">Account Not Found in the Database</axis2ns1:Message>
     //                                         </ns:UnsecureBankingServiceException>
     //                                     </ns:UnsecureBankingServiceException>
     //                                 </detail>
-    //                             </soapenv:Fault>`;             
+    //                             </soapenv:Fault>`;            
 
     string[] expFaultResp = ["Account Not Found in the Database"];
     var resp4 = unsecureBankingConnector("urn:getAccountDetails", faultReq);
@@ -198,6 +203,7 @@ function faultAccountDetails() {
     match resp4 {
         soap:SoapResponse soapResponse => {
             xml temp = <xml>soapResponse.payload;
+            // io:println(temp);
             string[] soapFaultResp = [ <string>temp.selectDescendants(ns:Message)[0].getTextValue()];
             test:assertEquals(soapFaultResp, expFaultResp, msg = "Failed");
             
