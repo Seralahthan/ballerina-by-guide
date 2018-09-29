@@ -156,7 +156,7 @@ Once you are done with the development, you can deploy the service locally as be
 
 ### Deploying locally
 
-- As the first step, you can build a Ballerina executable archive (.balx) of the client that you developed. Navigate to `consuming_a_soap_service/guide` and run the following command.
+- As the first step, you can build a Ballerina executable archive (.balx) of the client that you developed. Navigate to `consuming-a-soap-service/guide` and run the following command.
 ```bash
    $ ballerina build consuming_a_soap_service
 ```
