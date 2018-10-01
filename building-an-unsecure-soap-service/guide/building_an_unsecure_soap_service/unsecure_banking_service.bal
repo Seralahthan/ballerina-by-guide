@@ -24,7 +24,7 @@ service<http:Service> soapHandler bind soapHandlerEndpoint {
         xmlns "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" as wsu;
 
         http:Response response = new;
-        response.setPayload("Succesfully processed\n");
+        response.setHeader("Content-Type","text/xml");
 
         log:printInfo("Processing the SOAP request from the client");
         var res = req.getXmlPayload();
